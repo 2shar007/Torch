@@ -7,8 +7,12 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 
 /**
@@ -18,6 +22,9 @@ import android.view.View;
  * @see SystemUiHider
  */
 public class FullscreenActivity extends Activity {
+
+    private SeekBar seekBar;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -51,6 +58,42 @@ public class FullscreenActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_fullscreen);
+
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+
+        setManualBrightness();
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                final int threshold = 50;
+                final int mean = 125;
+
+                TextView tView = (TextView)findViewById(R.id.fullscreen_content);
+
+                if(progress <= threshold) {
+                    progress = threshold;
+                }
+
+                if(progress >= mean) {
+                    tView.setText(R.string.blank_content);
+                } else {
+                    tView.setText(getString(R.string.torch_content));
+                }
+
+                setScreenBrightness(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
@@ -112,7 +155,7 @@ public class FullscreenActivity extends Activity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+        seekBar.setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override
@@ -156,5 +199,26 @@ public class FullscreenActivity extends Activity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    private void setManualBrightness() {
+        try {
+            int brightnessMode = Settings.System.getInt(getContentResolver(),
+                    Settings.System.SCREEN_BRIGHTNESS_MODE);
+            if(brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
+                Settings.System.putInt(getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS_MODE,
+                        Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+            }
+        } catch(Exception e) {
+
+        }
+    }
+
+    private void setScreenBrightness(double value) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        float newBrightness = (float) value;
+        lp.screenBrightness = newBrightness / (float) 255;
+        getWindow().setAttributes(lp);
     }
 }

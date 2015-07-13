@@ -2,5 +2,6 @@
     <string name="app_name">Torch</string>
 
     <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="torch_content">TORCH</string>
+    <string name="blank_content"></string>
 </resources>
