@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ToggleButton;
 
+import com.inmobi.commons.InMobi;
 import com.tusharghosh.torch.util.SystemUiHider;
 
 
@@ -66,6 +67,9 @@ public class FullscreenActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_fullscreen);
+
+        // Mention property ID
+        InMobi.initialize(this, "");
 
         button = (ToggleButton) findViewById(R.id.button);
 
