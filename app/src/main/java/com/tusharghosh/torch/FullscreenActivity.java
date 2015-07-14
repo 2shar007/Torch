@@ -1,7 +1,5 @@
 package com.tusharghosh.torch;
 
-import com.tusharghosh.torch.util.SystemUiHider;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
@@ -10,9 +8,13 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.tusharghosh.torch.util.SystemUiHider;
 
 
 /**
@@ -57,6 +59,10 @@ public class FullscreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_fullscreen);
 
         seekBar = (SeekBar) findViewById(R.id.seekBar);
@@ -71,8 +77,13 @@ public class FullscreenActivity extends Activity {
 
                 TextView tView = (TextView)findViewById(R.id.fullscreen_content);
 
+                FrameLayout fl = (FrameLayout) findViewById(R.id.fullscreen);
+
                 if(progress <= threshold) {
                     progress = threshold;
+                    fl.setBackgroundColor(getResources().getColor(R.color.black));
+                } else {
+                    fl.setBackgroundColor(getResources().getColor(R.color.white));
                 }
 
                 if(progress >= mean) {
@@ -109,9 +120,9 @@ public class FullscreenActivity extends Activity {
                     int mShortAnimTime;
 
                     @Override
-                    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+                    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
                     public void onVisibilityChange(boolean visible) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                             // If the ViewPropertyAnimator API is available
                             // (Honeycomb MR2 and later), use it to animate the
                             // in-layout UI controls at the bottom of the

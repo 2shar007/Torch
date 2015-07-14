@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:background="#ffffff"
-    tools:context=".FullscreenActivity">
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/fullscreen"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@android:color/black" tools:context=".FullscreenActivity">
 
     <!-- Icons courtesy of Android asset studio, CC 2.0 -->
 
@@ -21,7 +21,7 @@
         <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"
             android:layout_width="match_parent" android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:background="@color/black_overlay" android:orientation="horizontal"
+            android:background="@color/black" android:orientation="horizontal"
             tools:ignore="UselessParent">
 
             <SeekBar
