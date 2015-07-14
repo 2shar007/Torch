@@ -10,11 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.tusharghosh.torch.util.SystemUiHider;
@@ -27,6 +24,8 @@ import com.tusharghosh.torch.util.SystemUiHider;
  * @see SystemUiHider
  */
 public class FullscreenActivity extends Activity {
+
+    private int brightnessMode;
 
     private ToggleButton button;
 
@@ -70,7 +69,7 @@ public class FullscreenActivity extends Activity {
 
         button = (ToggleButton) findViewById(R.id.button);
 
-        setManualBrightness();
+        setBrightnessMode();
 
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -161,6 +160,25 @@ public class FullscreenActivity extends Activity {
         delayedHide(100);
     }
 
+    protected void onResume() {
+        super.onResume();
+        setBrightnessMode();
+    }
+
+    protected void onPause() {
+        unsetBrightnessMode();
+        super.onPause();
+    }
+
+    protected void onStop() {
+        unsetBrightnessMode();
+        super.onStop();
+    }
+
+    protected void onDestroy() {
+        unsetBrightnessMode();
+        super.onDestroy();
+    }
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -194,15 +212,25 @@ public class FullscreenActivity extends Activity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    private void setManualBrightness() {
+    private void setBrightnessMode() {
         try {
-            int brightnessMode = Settings.System.getInt(getContentResolver(),
+            brightnessMode = Settings.System.getInt(getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS_MODE);
             if(brightnessMode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC) {
                 Settings.System.putInt(getContentResolver(),
                         Settings.System.SCREEN_BRIGHTNESS_MODE,
                         Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
             }
+        } catch(Exception e) {
+
+        }
+    }
+
+    private void unsetBrightnessMode() {
+        try {
+            Settings.System.putInt(getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS_MODE,
+                        brightnessMode);
         } catch(Exception e) {
 
         }
