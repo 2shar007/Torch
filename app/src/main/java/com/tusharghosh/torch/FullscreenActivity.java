@@ -10,9 +10,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.tusharghosh.torch.util.SystemUiHider;
 
@@ -25,7 +28,7 @@ import com.tusharghosh.torch.util.SystemUiHider;
  */
 public class FullscreenActivity extends Activity {
 
-    private SeekBar seekBar;
+    private ToggleButton button;
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -65,44 +68,23 @@ public class FullscreenActivity extends Activity {
 
         setContentView(R.layout.activity_fullscreen);
 
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
+        button = (ToggleButton) findViewById(R.id.button);
 
         setManualBrightness();
 
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                final int threshold = 50;
-                final int mean = 125;
-
-                TextView tView = (TextView)findViewById(R.id.fullscreen_content);
-
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 FrameLayout fl = (FrameLayout) findViewById(R.id.fullscreen);
-
-                if(progress <= threshold) {
-                    progress = threshold;
-                    fl.setBackgroundColor(getResources().getColor(R.color.black));
-                } else {
+                if(isChecked) {
                     fl.setBackgroundColor(getResources().getColor(R.color.white));
-                }
-
-                if(progress >= mean) {
-                    tView.setText(R.string.blank_content);
+                    setScreenBrightness(255f);
+                    button.setTextColor(getResources().getColor(R.color.gray));
                 } else {
-                    tView.setText(getString(R.string.torch_content));
+                    setScreenBrightness(20f);
+                    fl.setBackgroundColor(getResources().getColor(R.color.black));
+                    button.setTextColor(getResources().getColor(R.color.white));
                 }
-
-                setScreenBrightness(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 
@@ -166,7 +148,7 @@ public class FullscreenActivity extends Activity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        seekBar.setOnTouchListener(mDelayHideTouchListener);
+        button.setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override

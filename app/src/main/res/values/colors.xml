@@ -1,6 +1,13 @@
 <resources>
 
     <color name="black">#ff000000</color>
+    <color name="gray">#ffd3d3d3</color>
     <color name="white">#ffffffff</color>
+
+    <color name="light_red">#ffef4444</color>
+    <color name="dark_red">#ff992f2f</color>
+
+    <color name="light_blue">#ff0288d1</color>
+    <color name="dark_blue">#ff01579b</color>
 
 </resources>
