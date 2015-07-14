@@ -19,6 +19,18 @@
         android:fitsSystemWindows="true"
         android:layout_gravity="center_horizontal|top">
 
+        <LinearLayout android:id="@+id/fullscreen_content_controls" style="?metaButtonBarStyle"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black" android:orientation="horizontal"
+            tools:ignore="UselessParent">
+
+            <com.inmobi.monetization.IMBanner android:layout_width="320dp"
+                android:layout_height="50dp" android:id="@+id/banner"
+                adSize="15" appId="c3bc6bc6a1f34addaa9995d42774beb9" />
+
+        </LinearLayout>
+
         <ToggleButton
             android:layout_width="100dp"
             android:layout_height="100dp"

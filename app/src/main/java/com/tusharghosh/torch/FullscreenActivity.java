@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.ToggleButton;
 
 import com.inmobi.commons.InMobi;
+import com.inmobi.monetization.IMBanner;
 import com.tusharghosh.torch.util.SystemUiHider;
 
 
@@ -69,7 +70,7 @@ public class FullscreenActivity extends Activity {
         setContentView(R.layout.activity_fullscreen);
 
         // Mention property ID
-        InMobi.initialize(this, "");
+        InMobi.initialize(this, "c3bc6bc6a1f34addaa9995d42774beb9");
 
         button = (ToggleButton) findViewById(R.id.button);
 
@@ -83,10 +84,16 @@ public class FullscreenActivity extends Activity {
                     fl.setBackgroundColor(getResources().getColor(R.color.white));
                     setScreenBrightness(255f);
                     button.setTextColor(getResources().getColor(R.color.gray));
+
+                    //IMBanner banner = (IMBanner) findViewById(R.id.banner);
                 } else {
                     setScreenBrightness(20f);
                     fl.setBackgroundColor(getResources().getColor(R.color.black));
+
                     button.setTextColor(getResources().getColor(R.color.white));
+
+                    IMBanner banner = (IMBanner) findViewById(R.id.banner);
+                    banner.loadBanner();
                 }
             }
         });
