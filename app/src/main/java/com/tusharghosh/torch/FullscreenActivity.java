@@ -63,6 +63,8 @@ public class FullscreenActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setBrightnessMode();
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -70,11 +72,9 @@ public class FullscreenActivity extends Activity {
         setContentView(R.layout.activity_fullscreen);
 
         // Mention property ID
-        InMobi.initialize(this, "c3bc6bc6a1f34addaa9995d42774beb9");
+        InMobi.initialize(this, getString(R.string.property_id));
 
         button = (ToggleButton) findViewById(R.id.button);
-
-        setBrightnessMode();
 
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -171,24 +171,13 @@ public class FullscreenActivity extends Activity {
         delayedHide(100);
     }
 
-    protected void onResume() {
-        super.onResume();
-        setBrightnessMode();
-    }
-
-    protected void onPause() {
-        unsetBrightnessMode();
-        super.onPause();
-    }
-
     protected void onStop() {
         unsetBrightnessMode();
         super.onStop();
     }
 
     protected void onDestroy() {
-        unsetBrightnessMode();
-        super.onDestroy();
+        onStop();
     }
 
     /**
@@ -232,9 +221,7 @@ public class FullscreenActivity extends Activity {
                         Settings.System.SCREEN_BRIGHTNESS_MODE,
                         Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
             }
-        } catch(Exception e) {
-
-        }
+        } catch(Exception e) {}
     }
 
     private void unsetBrightnessMode() {
@@ -242,9 +229,7 @@ public class FullscreenActivity extends Activity {
             Settings.System.putInt(getContentResolver(),
                         Settings.System.SCREEN_BRIGHTNESS_MODE,
                         brightnessMode);
-        } catch(Exception e) {
-
-        }
+        } catch(Exception e) {}
     }
 
     private void setScreenBrightness(double value) {
