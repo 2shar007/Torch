@@ -16,6 +16,10 @@
 #   public *;
 #}
 
+-keep class com.inmobi.** { *; }
+
+-dontwarn com.inmobi.**
+
 -keep class com.google.android.gms.ads.identifier.AdvertisingIdClient{
     public *;
 }
